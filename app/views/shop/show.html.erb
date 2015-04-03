@@ -1,0 +1,14 @@
+<ul data-role="listview" data-inset="true">
+<li data-role="list-divider"><%= @shop.name %><span class="ui-li-count"></span></li>
+	<% @shop.products.each do |pro|%>
+	<li>
+		<a href="/product/<%= pro.id %>">
+			<img src="/ssets/images/album-p.jpg">
+			<h2><%= pro.name %></h2>
+			<p><strong>价格：￥<%= pro.price %></strong></p>
+			<p><%= pro.discription %></p>
+			<p class="ui-li-aside"><strong>近一个月销量：<%= pro.one_month_sales %></strong></p>
+		</a>
+	</li>
+	<% end %>
+</ul>

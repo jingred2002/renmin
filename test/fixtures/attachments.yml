@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  file_name: MyString
+  container_id: 1
+  container_type: MyString
+  disk_name: MyString
+  disk_directory: MyString
+
+two:
+  file_name: MyString
+  container_id: 1
+  container_type: MyString
+  disk_name: MyString
+  disk_directory: MyString

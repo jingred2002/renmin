@@ -1,0 +1,32 @@
+<ul data-role="listview" data-inset="true">
+	<li><a href="#">
+		<img src="../_assets/img/album-bb.jpg">
+		<h2>Broken Bells</h2>
+		<p>Broken Bells</p></a>
+	</li>
+	<li><a href="#">
+		<img src="../_assets/img/album-hc.jpg">
+		<h2>Warning</h2>
+		<p>Hot Chip</p></a>
+	</li>
+	<li><a href="#">
+		<img src="../_assets/img/album-p.jpg">
+		<h2>Wolfgang Amadeus Phoenix</h2>
+		<p>Phoenix</p></a>
+	</li>
+</ul>
+<ul data-role="listview" data-inset="true">
+<li data-role="list-divider">附近商店</li>
+	<% @shops.each do |shop|%>
+	<li>
+		<a href="/shop/<%= shop.id %>">
+			<img src="/ssets/images/album-p.jpg">
+			<h2><%= shop.name %></h2>
+			<p><strong><%= shop.discription %></strong></p>
+			<p><strong>地址：<%= shop.address %></strong></p>
+			<p>起送价￥<%= shop.send_up %> &nbsp;&nbsp;&nbsp;配送费￥<%= shop.send_expenses %> &nbsp;&nbsp;&nbsp;预计<%= shop.send_time %>分钟送达</p>
+			<p class="ui-li-aside"><strong>近一个月成交<%= shop.one_month_orders_count %></strong></p>
+		</a>
+	</li>
+	<% end %>
+</ul>

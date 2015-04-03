@@ -1,0 +1,96 @@
+<%= form_for( @user, :url=>{:action => 'create'}, :html => {:id => "new_form", :onsubmit => "return check_input();"})  do |f| %>
+	<label for="login_name">登录名：</label>
+	<input type="text" data-clear-btn="true" name="user[login_name]" id="login_name" value="">
+	<label for="password">密码：</label>
+	<input type="password" data-clear-btn="true" name="user[password]" id="password" value="" autocomplete="off">
+	<label for="repassword">再次密码：</label>
+	<input type="password" data-clear-btn="true" name="repassword" id="repassword" value="" autocomplete="off">
+	<label for="mobile">手机：</label>
+	<input type="tel" data-clear-btn="true" name="user[mobile]" id="mobile" value="">
+	<fieldset data-role="controlgroup" data-type="horizontal">
+		<legend>请选择区域：</legend>
+		<label for="select-native-11">省：</label>
+		<select name="select-native-11" id="select-sheng" onchange="get_area('select-sheng','select-shi');">
+			<% @area.each do |area| %>
+			<option value="">请选择</option>
+			<option value="<%= area.id %>"><%= area.name %></option>
+			<% end %>
+		</select>
+		<label for="select-native-12">市：</label>
+		<select name="select-native-12" id="select-shi" onchange="get_area('select-shi','select-qu');">
+		</select>
+		<label for="select-native-13">区：</label>
+		<select name="user[area_id]" id="select-qu">
+		</select>
+	</fieldset>
+	<input type="button" value="注册" onclick="check_input();"><input type="reset" value="重置">
+	<%= tag(:input, :type => "hidden", :id=>"token", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+
+<% end %>
+<script>
+	function check_input(){
+		var login_name = $('login_name').value;
+		var password = $('password').value;
+		var repassword = $('repassword').value;
+		var mobile = $('mobile').value;
+		var area = $('select-qu').value;
+		var token = $('token').value;
+		if (login_name == ""){
+			alert('登录名不能为空！');
+			return false;
+		}else if (password == ""){
+			alert('密码不能为空！');
+			return false;
+		}else if (repassword == ""){
+			alert('请再次输入密码！');
+			return false;
+		}else if (password != repassword){
+			alert('两次填写的密码不一致！');
+			return false;
+		}else if(area == ""){
+			alert('请选择区域！');
+			return false;
+		}
+		new Ajax.Request('/user/create', {
+			method:     'post',
+			parameters: {login_name:login_name,password:password,authenticity_token:token,mobile:mobile},
+			onSuccess: function(data){
+				var dt = data.responseText.evalJSON();
+				if (dt.state == 'ok'){
+					window.location.href = '/shop/index';
+				}else{
+					alert(dt.state);
+				}
+			}
+			});
+	}
+	function get_area(s,target){
+		var obj = $(s);
+		var index = obj.selectedIndex; // 选中索引
+		// var text = obj.options[index].text; // 选中文本
+		var value = obj.options[index].value; // 选中值
+		if(value != ""){
+			new Ajax.Updater(target, '/area/get_area', {
+				method:     'get',
+				parameters: {pid:value}
+				});
+		}else{
+			ClearOption(target);
+		}
+	}
+
+//清除select
+function ClearOption(selectId){
+	var select_obj = $(selectId);
+	select_obj.options.length = 0;
+	select_obj[0] = new Option('请选择','');
+}
+
+function AddOption(optionId,Text,Value){
+	var TemObj =$(optionId);//获取列表对象
+	var TemOption = new Option(Text,Value);//定义一个选项对象
+	//TemOption.selected = "selected";//设定新建的项为被选项
+	TemObj[TemObj.length] = TemOption;//添加到列表
+}
+</script>
+

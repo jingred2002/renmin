@@ -1,0 +1,41 @@
+<a href="#login" data-rel="popup" data-position-to="window" data-role="button">登录</a>
+<a href="/user/new"  data-role="button">注册</a>
+        <p style="color:red;text-align:center"><%= flash[:notice] %></p>
+<div data-role="popup" id="login" data-theme="a">
+<form id="new_form" action="/user/login" accept-charset="UTF-8" method="post" style="padding:10px 20px;">
+        <h3>快速登录</h3> 
+        <label for="un" class="ui-hidden-accessible">用户名:</label>   
+        <input type="js" name="login_name" id="login_name" placeholder="username" />   
+        <label for="pw" class="ui-hidden-accessible">密码:</label>   
+        <input type="password" name="password" id="password" placeholder="password" /> 
+        <%= tag(:input, :type => "hidden", :id=>"token", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+        <button type="button" data-theme="a" onclick="login();">登录</button>   
+    </form>   
+</div> 
+<script>
+	function login(){
+		var login_name = $('login_name').value;
+		var password = $('password').value;
+		var token = $('token').value;
+		if (login_name == ""){
+			alert('登录名不能为空！');
+			return false;
+		}else if (password == ""){
+			alert('密码不能为空！');
+			return false;
+		}else{
+			new Ajax.Request('/user/login', {
+				method:     'post',
+				parameters: {login_name:login_name,password:password,authenticity_token:token},
+				onSuccess: function(data){
+					var dt = data.responseText.evalJSON();
+					if (dt.state == 'ok'){
+						window.location.href = '/shop/index';
+					}else{
+						alert(dt.state);
+					}
+				}
+				});
+		}
+	}
+</script>
